@@ -9,8 +9,9 @@ tier_list = {}  # Key: name, Value: Dict{'count', 'checkbox_var', 'checkbox_widg
 
 def key_order(text: str):
     """This function handles alphabetical sorting. Any special rules or character replacements go here."""
-    # Any characters inside the brackets will be ignored when sorting. Separate with commas and enclose in quotes.
-    chars_to_ignore = ['~', "'", " "]
+    chars_to_allow = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+                      "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+                      "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
     # Any characters that should be treated as a different character go here.
     # This is for sorting purposes only and will not change the final output.
@@ -19,11 +20,15 @@ def key_order(text: str):
     to_return = []
     for char in text:
         char_to_append = char.lower()
-        if char_to_append in chars_to_ignore:
-            continue
-        for pair in chars_to_replace:
-            if char_to_append == pair[0]:
-                char_to_append = pair[1]
+        if char_to_append == '♥':
+            print(char_to_append)
+        if char_to_append not in chars_to_allow:
+            for pair in chars_to_replace:
+                if char_to_append == pair[0]:
+                    char_to_append = pair[1]
+            else:
+                continue
+
         to_return.append(char_to_append)
     return to_return
 
@@ -35,8 +40,9 @@ def key_alpha_order(item: str):
 
 def key_pledge_order(item: (str, float)):
     """Helper function that calls key_order() to sort by pledge amounts first, and alphabetically second."""
-    pledge_str = format((1000000 - item[1]), '.2f')     # Subtract from a large value to ensure highest to lowest sort, and convert to a string with exactly two decimal places.
-    pledge_str = pledge_str.zfill(10)                   # Add leading zeros to conform all values to the same string length.
+    pledge_str = format((1000000 - item[1]),
+                        '.2f')  # Subtract from a large value to ensure highest to lowest sort, and convert to a string with exactly two decimal places.
+    pledge_str = pledge_str.zfill(10)  # Add leading zeros to conform all values to the same string length.
     return key_order(pledge_str + item[0])
 
 
@@ -60,7 +66,8 @@ def generate_list():
                 text += '\n----------------------------------------\n'
                 text += result[0]
                 text += "\n\n"
-                current_list = result[1]    # Prepare for the next tier by replacing the list of patrons with the returned list of unprocessed patrons.
+                current_list = result[
+                    1]  # Prepare for the next tier by replacing the list of patrons with the returned list of unprocessed patrons.
     textbox.config(state='normal')
     textbox.delete("1.0", END)
     textbox.insert(END, text)
@@ -167,12 +174,12 @@ def show_amounts():
     """Adds widgets to allow entry of each tier's pledge amount"""
     row_count = 1
     for key in tier_list.keys():
-
         new_var = IntVar()
         new_var.set(1)
         tier_list[key]['checkbox_var'] = new_var
 
-        new_button = ttk.Checkbutton(frame_tiers, text=key + ' (' + str(tier_list[key]['count']) + ')', variable=new_var)
+        new_button = ttk.Checkbutton(frame_tiers, text=key + ' (' + str(tier_list[key]['count']) + ')',
+                                     variable=new_var)
         new_button.grid(column=1, row=row_count, padx=10, sticky='W')
         tier_list[key]['checkbox_widget'] = new_button
 
@@ -188,6 +195,7 @@ def show_amounts():
         tier_list[key]['minpledge_widget'] = new_amount_widget
 
         row_count += 1
+
 
 def hide_amounts():
     """Removes the pledge amount widgets"""
@@ -230,12 +238,12 @@ def open_file():
     # Create the list of tiers and their associated checkboxes.
     row_count = 1
     for key in tier_list.keys():
-
         new_var = IntVar()
         new_var.set(1)
         tier_list[key]['checkbox_var'] = new_var
 
-        new_button = ttk.Checkbutton(frame_tiers, text=key + ' (' + str(tier_list[key]['count']) + ')', variable=new_var)
+        new_button = ttk.Checkbutton(frame_tiers, text=key + ' (' + str(tier_list[key]['count']) + ')',
+                                     variable=new_var)
         new_button.grid(column=1, row=row_count, padx=10, sticky='W')
         tier_list[key]['checkbox_widget'] = new_button
 
@@ -258,7 +266,7 @@ root = Tk()
 root.title("Patreon CSV to List")
 
 frame = ttk.Frame(root, padding=10)
-frame.grid(column=0, row=0, sticky=(N,W,E,S))
+frame.grid(column=0, row=0, sticky=(N, W, E, S))
 
 load_button = ttk.Button(frame, text="Load CSV File", command=open_file)
 load_button.grid(column=1, row=1)
@@ -276,18 +284,19 @@ frame_options['relief'] = 'solid'
 separation_var = StringVar()
 separation_var.set('mix')
 frame_separation = ttk.Frame(frame_options, padding=10)
-frame_separation.grid(row=1, sticky=(N,W,E,S))
+frame_separation.grid(row=1, sticky=(N, W, E, S))
 
 rbutton_single = ttk.Radiobutton(frame_separation, text='Mix Tiers Together', variable=separation_var, value='mix')
 rbutton_single.grid(column=1, row=1, padx=20)
-rbutton_separate = ttk.Radiobutton(frame_separation, text='Keep Tiers Separated', variable=separation_var, value='separate')
+rbutton_separate = ttk.Radiobutton(frame_separation, text='Keep Tiers Separated', variable=separation_var,
+                                   value='separate')
 rbutton_separate.grid(column=2, row=1, padx=20)
 
 ttk.Separator(frame_options, orient='horizontal').grid(row=2, sticky=(N, S, E, W))
 
 # Columns Frame
 frame_columns = ttk.Frame(frame_options, padding=10)
-frame_columns.grid(row=2, sticky=(N,W,E,S))
+frame_columns.grid(row=2, sticky=(N, W, E, S))
 columns_var = IntVar()
 columns_var.set(1)
 
@@ -300,7 +309,7 @@ ttk.Separator(frame_options, orient='horizontal').grid(row=3, sticky=(N, S, E, W
 
 # Sorting method
 frame_sort = ttk.Frame(frame_options, padding=10)
-frame_sort.grid(row=3, sticky=(N,W,E,S) )
+frame_sort.grid(row=3, sticky=(N, W, E, S))
 
 label_sort = ttk.Label(frame_sort, text='Sort patron list by:')
 label_sort.grid(column=1, row=1, columnspan=2, sticky=(N, S, E, W))
@@ -336,9 +345,11 @@ label_categorize = ttk.Label(frame_categorize, text='Categorize patrons into tie
 label_categorize.grid(column=1, row=1, columnspan=2, sticky=(N, S, E, W))
 categorize_var = StringVar()
 categorize_var.set('listed')
-rbutton_sort_listed = ttk.Radiobutton(frame_categorize, text='Listed Tier', variable=categorize_var, value='listed', command=hide_amounts)
+rbutton_sort_listed = ttk.Radiobutton(frame_categorize, text='Listed Tier', variable=categorize_var, value='listed',
+                                      command=hide_amounts)
 rbutton_sort_listed.grid(column=1, row=2, padx=20)
-rbutton_sort_amount = ttk.Radiobutton(frame_categorize, text='Pledge Amount', variable=categorize_var, value='amount', command=show_amounts)
+rbutton_sort_amount = ttk.Radiobutton(frame_categorize, text='Pledge Amount', variable=categorize_var, value='amount',
+                                      command=show_amounts)
 rbutton_sort_amount.grid(column=2, row=2, padx=20)
 
 toggle_child_widgets(frame_options, 'disabled')
@@ -353,6 +364,5 @@ textbox.config(state='disabled')
 
 copy_button = ttk.Button(frame, text="Copy to Clipboard", command=copy_to_clipboard)
 copy_button.grid(column=1, row=7)
-
 
 root.mainloop()
