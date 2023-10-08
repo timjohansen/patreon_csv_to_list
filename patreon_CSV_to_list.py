@@ -11,7 +11,8 @@ def key_order(text: str):
     """This function handles alphabetical sorting. Any special rules or character replacements go here."""
     chars_to_allow = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
                       "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-                      "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+                      "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5",
+                      "6", "7", "8", "9", "0"]
 
     # Any characters that should be treated as a different character go here.
     # This is for sorting purposes only and will not change the final output.
