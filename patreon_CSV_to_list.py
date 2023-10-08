@@ -7,6 +7,7 @@ patron_list = None
 tier_list = {}  # Key: name, Value: Dict{'count', 'checkbox_var', 'checkbox_widget', 'minpledge_var', 'minpledge_widget', 'minpledge_curlabel'}
 
 
+
 def key_order(text: str):
     """This function handles alphabetical sorting. Any special rules or character replacements go here."""
     chars_to_allow = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
